@@ -10,7 +10,6 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     env:
-      # Ensure non-interactive opam commands
       OPAMYES: "1"
     steps:
       - name: Checkout code
@@ -23,26 +22,21 @@ jobs:
 
       - name: Initialize opam and create switch for Coq 8.14.1
         run: |
-          # Initialize opam (non-interactive)
           opam init --disable-sandboxing -y
-          # Create a switch with Coq 8.14.1 (OCaml 4.14.1 is used by Coq 8.14.1)
           opam switch create coq-8.14.1 --packages=coq.8.14.1
           eval $(opam env --switch=coq-8.14.1)
           opam update -y
 
       - name: Add Coq-released repository and install Coquelicot
         run: |
-          # Add the Coq repository containing released Coq packages (including Coquelicot)
           opam repo add coq-released https://coq.inria.fr/opam/released --yes
           opam update -y
-          # Install Coquelicot 3.2.0 (compatible with Coq 8.14.1)
           opam install -y coq-coquelicot.3.2.0
-          # Refresh environment
           eval $(opam env --switch=coq-8.14.1)
 
       - name: Run Coq Verification
         run: |
           eval $(opam env --switch=coq-8.14.1)
-          # Compile all Coq files found in the 'coq' directory.
-          # Replace this with your project's build command if you use a Makefile.
-          find coq -name '*.v' -print0 | xargs -0 -n1 coqc
+          # Compile all Coq files in the 'coq' directory,
+          # mapping the physical directory 'coq' to the logical library 'UOR_H1_HPO'
+          find coq -name '*.v' -print0 | xargs -0 -n1 coqc -R coq UOR_H1_HPO
