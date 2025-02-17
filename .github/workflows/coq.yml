@@ -13,15 +13,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Coq
+      - name: Set up Coq and opam
+        uses: coq-community/setup-coq@v2
+        with:
+          coq-version: '8.17'   # Adjust this version to match your project’s Coq version
+
+      - name: Install Coquelicot dependency
         run: |
-          sudo apt-get update
-          sudo apt-get install -y coq
+          opam update
+          opam install coquelicot
 
       - name: Run Coq Verification
         run: |
-          # If you have a Makefile in your Coq directory, you can run:
-          # make -C coq
-          #
-          # Otherwise, compile all .v files in the 'coq' directory:
           find coq -name '*.v' -print0 | xargs -0 -n1 coqc
