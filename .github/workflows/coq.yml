@@ -13,10 +13,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Coq and opam
-        uses: coq-community/setup-coq@v2
+      - name: Set up Coq environment
+        uses: coq-community/setup-coq@v1
         with:
-          coq-version: '8.17'   # Adjust this version to match your project’s Coq version
+          coq-version: '8.17'  # Adjust this version if needed
 
       - name: Install Coquelicot dependency
         run: |
