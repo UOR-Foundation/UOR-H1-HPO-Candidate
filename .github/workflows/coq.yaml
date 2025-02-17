@@ -1,0 +1,27 @@
+name: Coq Verification
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Coq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y coq
+
+      - name: Run Coq Verification
+        run: |
+          # If you have a Makefile in your Coq directory, you can run:
+          # make -C coq
+          #
+          # Otherwise, compile all .v files in the 'coq' directory:
+          find coq -name '*.v' -print0 | xargs -0 -n1 coqc
