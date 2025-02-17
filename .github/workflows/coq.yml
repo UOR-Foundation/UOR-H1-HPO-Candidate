@@ -38,5 +38,5 @@ jobs:
         run: |
           eval $(opam env --switch=coq-8.14.1)
           # Compile all Coq files in the 'coq' directory,
-          # mapping the physical directory 'coq' to the logical library 'UOR_H1_HPO'
-          find coq -name '*.v' -print0 | xargs -0 -n1 coqc -R coq UOR_H1_HPO
+          # mapping the physical directory 'coq' to the logical library 'UORH1HPO'
+          find coq -name '*.v' -print0 | xargs -0 -n1 coqc -R coq UORH1HPO
