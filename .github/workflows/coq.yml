@@ -17,16 +17,15 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y opam
-          # Initialize opam (disable sandboxing for compatibility with GitHub runners)
           opam init -y --disable-sandboxing
-          # Create a switch with Coq 8.17.1 using the explicit package version
-          opam switch create coq-8.17.1 --packages=coq.8.17.1
+          # Create a switch using Coq 8.14.1 (adjust if needed)
+          opam switch create coq-8.14.1 --packages=coq.8.14.1
           eval $(opam env)
-          # Install Coquelicot, which is needed by your proofs
+          # Install Coquelicot which is available for Coq 8.14.1
           opam install -y coquelicot
 
       - name: Run Coq Verification
         run: |
           eval $(opam env)
-          # Optionally, if you have a Makefile, use: make -C coq
+          # If you have a Makefile in your 'coq' directory, you can use: make -C coq
           find coq -name '*.v' -print0 | xargs -0 -n1 coqc
