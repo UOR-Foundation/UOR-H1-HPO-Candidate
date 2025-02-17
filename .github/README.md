@@ -19,8 +19,9 @@ The entire proof is formalized in Coq, providing a machine-checked verification 
 
 ## Repository Structure
 
-- `The Formalized UOR H1 HPO Candidate and Proofs.tex`: The main LaTeX document containing the narrative of the proof.
-- `appendix.tex`: An appendix with additional details and proofs.
+- `UOR-H1-HPO-Candidate.tex`: The main LaTeX document containing the narrative of the proof.
+- `Appendix-1-Structures.tex`: An appendix with additional details and proofs.
+-  `Appendix-2-Principles.tex`: An appendix with the complete UOR construction of the UOR H1 HPO Candidate.
 - `coq/`: The directory containing the Coq formalization of the proof.
 
 ## Usage

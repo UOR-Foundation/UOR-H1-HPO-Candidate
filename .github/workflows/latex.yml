@@ -1,0 +1,55 @@
+name: Compile and Publish LaTeX
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up LaTeX
+        run: sudo apt-get install texlive-full
+
+      - name: Create output directory
+        run: mkdir -p pdf_output
+
+      - name: Compile LaTeX documents
+        run: |
+          # Find all .tex files and compile them
+          for file in $(find . -name "*.tex" -type f); do
+            filename=$(basename "$file" .tex)
+            # First pass
+            pdflatex -interaction=nonstopmode "$filename.tex"
+            # Second pass for references
+            pdflatex -interaction=nonstopmode "$filename.tex"
+            # Move PDF to output directory
+            mv "$filename.pdf" ./pdf_output/
+          done
+
+      - name: Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Or use a PAT if needed
+        run: |
+          VERSION="v$(date +'%Y%m%d%H%M%S')"
+          gh release create "$VERSION" \
+            --title "LaTeX Documents $(date +'%Y-%m-%d')" \
+            --notes "Automatically generated PDFs from LaTeX sources" \
+            pdf_output/*.pdf
+
+      - name: Upload Release Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: latex-pdfs
+          path: pdf_output/*.pdf

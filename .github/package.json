@@ -1,0 +1,15 @@
+{
+  "name": "latex-project",
+  "version": "1.0.0",
+  "description": "A project for compiling and publishing LaTeX documents as GitHub packages.",
+  "scripts": {
+    "build": "pdflatex src/main.tex && pdflatex src/appendix.tex",
+    "publish": "npm run build && npm publish"
+  },
+  "dependencies": {
+    "latex": "^1.0.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^3.2.3"
+  }
+}
