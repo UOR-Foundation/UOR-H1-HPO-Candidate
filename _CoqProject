@@ -1,2 +1,8 @@
 -R coq UORH1HPO
-coq/UORH1HPO.v
+coq/CompactResolvent.v
+coq/Eigenfunctions.v
+coq/Integration.v
+coq/InverseSpectralTheory.v
+coq/MellinTransform.v
+coq/SelfAdjointness.v
+coq/ThetaInversion.v
