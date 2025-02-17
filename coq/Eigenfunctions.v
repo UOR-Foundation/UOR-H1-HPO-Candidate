@@ -7,7 +7,7 @@
 Require Import Reals.
 Require Import Coquelicot.Coquelicot.
 Require Import Psatz.
-Require Import MyUOR_H1.
+Require Import UOR_H1_HPO.
 Open Scope R_scope.
 
 (* We assume by axiom that for each n, ψ n satisfies the eigenvalue equation:
