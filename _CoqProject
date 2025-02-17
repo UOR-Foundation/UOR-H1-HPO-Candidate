@@ -1,1 +1,9 @@
 -R coq UOR_H1_HPO
+coq/ThetaInversion.v
+coq/Eigenfunctions.v
+coq/CompactResolvent.v
+coq/InverseSpectralTheory.v
+coq/MellinTransform.v
+coq/Integration.v
+coq/SelfAdjointness.v
+coq/UOR_H1_HPO.v
