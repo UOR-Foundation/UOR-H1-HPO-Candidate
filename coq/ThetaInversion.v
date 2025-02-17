@@ -6,7 +6,7 @@
 Require Import Reals.
 Require Import Coquelicot.Coquelicot.
 Require Import Psatz.
-Require Import UOR_H1_HPO.
+Require Import UORH1HPO.
 Open Scope R_scope.
 
 (* Recall that the spectral trace is defined as:

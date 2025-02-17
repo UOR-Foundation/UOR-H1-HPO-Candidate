@@ -1,7 +1,7 @@
-(** UOR_H1_HPO.v
+(** UORH1HPO.v
     This file serves as the top‑level module for the UOR H1 HPO Candidate formalization.
     It re‑exports the main components of the development so that other files can simply
-    "Require Import UOR_H1_HPO." to access the common definitions.
+    "Require Import UORH1HPO." to access the common definitions.
 *)
 
 Require Export ThetaInversion.
