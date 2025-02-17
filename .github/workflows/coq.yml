@@ -13,20 +13,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install opam and Coq
+      - name: Install opam, Git, and Coq
         run: |
           sudo apt-get update
-          sudo apt-get install -y opam
+          sudo apt-get install -y opam git
           opam init -y --disable-sandboxing
-          # Create an opam switch with Coq 8.14.1
+          # Create a switch for Coq 8.14.1
           opam switch create coq-8.14.1 --packages=coq.8.14.1
           eval $(opam env --switch=coq-8.14.1)
-          # Pin Coquelicot from its GitHub repository and install it
-          opam pin add -y coquelicot https://github.com/Coq-Project/coquelicot.git
+          # Disable interactive Git prompts
+          export GIT_TERMINAL_PROMPT=0
+          # Pin Coquelicot from the master branch (adjust the branch/tag if needed)
+          opam pin add -yn coquelicot https://github.com/Coq-Project/coquelicot.git#master
           opam install -y coquelicot
 
       - name: Run Coq Verification
         run: |
           eval $(opam env --switch=coq-8.14.1)
-          # Compile all .v files in the coq directory; replace with your Makefile if available
+          # Compile all .v files in the coq directory (or use your Makefile if available)
           find coq -name '*.v' -print0 | xargs -0 -n1 coqc
