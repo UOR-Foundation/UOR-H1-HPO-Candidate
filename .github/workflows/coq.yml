@@ -13,16 +13,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Coq environment
-        uses: coq-community/setup-coq@v1
-        with:
-          coq-version: '8.17'  # Adjust this version if needed
-
-      - name: Install Coquelicot dependency
+      - name: Install opam and Coq
         run: |
-          opam update
-          opam install coquelicot
+          sudo apt-get update
+          sudo apt-get install -y opam
+          # Initialize opam without sandboxing (Ubuntu runners require this flag)
+          opam init -y --disable-sandboxing
+          # Create and switch to an opam switch with the desired Coq version (adjust version if needed)
+          opam switch create coq-8.17.0 8.17.0
+          eval $(opam env)
+          # Install Coq and Coquelicot (add any additional dependencies here)
+          opam install -y coq coquelicot
 
       - name: Run Coq Verification
         run: |
+          # Ensure opam environment variables are loaded
+          eval $(opam env)
+          # Option 1: If you have a Makefile in the 'coq' directory, you could use: make -C coq
+          # Option 2: Otherwise, compile each .v file individually:
           find coq -name '*.v' -print0 | xargs -0 -n1 coqc
