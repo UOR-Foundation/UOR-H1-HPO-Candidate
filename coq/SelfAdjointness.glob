@@ -1,0 +1,5 @@
+DIGEST 26f932a10865028f5ac167a004219483
+FSelfAdjointness
+R345:349 Coq.Reals.Reals <> <> lib
+R367:387 Coquelicot.Coquelicot <> <> lib
+R405:409 Coq.micromega.Psatz <> <> lib

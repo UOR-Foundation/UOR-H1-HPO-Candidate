@@ -1,0 +1,5 @@
+DIGEST 4516794b9c0d0d2e7b6aa5712845c44f
+FInverseSpectralTheory
+R347:351 Coq.Reals.Reals <> <> lib
+R369:389 Coquelicot.Coquelicot <> <> lib
+R407:411 Coq.micromega.Psatz <> <> lib

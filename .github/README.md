@@ -1,4 +1,7 @@
 Compiled Docs: https://github.com/UOR-Foundation/UOR-H1-HPO-Candidate/releases/latest
+
+### This Repo is being actively developed to run the proofs in GitHub Actions. Start with the Docs and we'll try to have the proofs ready when you are done. 
+
 # Formalized UOR H1 HPO Candidate and Proofs
 
 This repository contains a formalized proof of the Riemann Hypothesis, developed within the Universal Object Reference (UOR) framework and verified using the Coq proof assistant.

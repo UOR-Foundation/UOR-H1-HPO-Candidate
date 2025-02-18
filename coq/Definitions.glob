@@ -1,0 +1,19 @@
+DIGEST 762b5c9cd192e06d71fa89cbf465e916
+FDefinitions
+R346:350 Coq.Reals.Reals <> <> lib
+R368:388 Coquelicot.Coquelicot <> <> lib
+R406:410 Coq.micromega.Psatz <> <> lib
+R428:442 Coquelicot.Rbar <> <> lib
+rec 540:547 <> L2_space
+proj 556:561 <> L2_fun
+proj 689:701 <> L2_integrable
+R566:569 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R565:565 Coq.Reals.Rdefinitions RbaseSymbolsImpl R defax
+R570:570 Coq.Reals.Rdefinitions RbaseSymbolsImpl R defax
+R705:711 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R717:718 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R716:716 Coq.Reals.Rdefinitions RbaseSymbolsImpl R defax
+binder 712:712 <> M:3
+R756:758 Coq.Reals.Rdefinitions <> ::R_scope:x_'<'_x not
+R725:726 Coq.Reals.Rdefinitions <> ::R_scope:x_'+'_x not
+R719:722 Coquelicot.RInt <> RInt def

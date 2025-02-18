@@ -1,0 +1,9 @@
+DIGEST bf526473c31d63fafa1688b3005c46e4
+FEigenfunctions
+R434:438 Coq.Reals.Reals <> <> lib
+R456:476 Coquelicot.Coquelicot <> <> lib
+R494:498 Coq.micromega.Psatz <> <> lib
+prf 688:705 <> psi_orthonormality
+binder 716:716 <> m:1
+binder 718:718 <> n:2
+R752:754 Coq.Init.Logic <> ::type_scope:x_'='_x not

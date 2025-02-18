@@ -1,0 +1,53 @@
+DIGEST 02c156b7ecf7e9600b1a95d1b5935df6
+FIntegration
+R506:510 Coq.Reals.Reals <> <> lib
+R528:548 Coquelicot.Coquelicot <> <> lib
+R566:570 Coq.micromega.Psatz <> <> lib
+prf 1111:1138 <> integration_by_parts_theorem
+R1159:1162 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1158:1158 Coq.Reals.Rdefinitions RbaseSymbolsImpl R defax
+R1163:1163 Coq.Reals.Rdefinitions RbaseSymbolsImpl R defax
+binder 1152:1152 <> f:1
+binder 1154:1154 <> g:2
+R1173:1173 Coq.Reals.Rdefinitions RbaseSymbolsImpl R defax
+binder 1167:1167 <> a:3
+binder 1169:1169 <> b:4
+R1186:1193 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1182:1184 Coq.Reals.Rdefinitions <> ::R_scope:x_'<'_x not
+R1181:1181 Integration <> a:3 var
+R1185:1185 Integration <> b:4 var
+R1194:1194 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1250:1258 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+binder 1202:1202 <> x:5
+R1216:1219 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R1206:1209 Coq.Reals.Rdefinitions <> ::R_scope:x_'<='_x_'<='_x not
+R1211:1214 Coq.Reals.Rdefinitions <> ::R_scope:x_'<='_x_'<='_x not
+R1205:1205 Integration <> a:3 var
+R1210:1210 Integration <> x:5 var
+R1210:1210 Integration <> x:5 var
+R1215:1215 Integration <> b:4 var
+R1233:1236 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R1220:1228 Coquelicot.Derive <> ex_derive def
+R1230:1230 Integration <> f:1 var
+R1232:1232 Integration <> x:5 var
+R1237:1245 Coquelicot.Derive <> ex_derive def
+R1247:1247 Integration <> g:2 var
+R1249:1249 Integration <> x:5 var
+R1285:1287 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R1259:1262 Coquelicot.RInt <> RInt def
+R1264:1264 Integration <> a:3 var
+R1266:1266 Integration <> b:4 var
+R1280:1282 Coq.Reals.Rdefinitions <> ::R_scope:x_'*'_x not
+R1269:1270 Coq.Reals.Rdefinitions <> ::R_scope:'-'_x not
+R1279:1279 Coq.Reals.Rdefinitions <> ::R_scope:'-'_x not
+R1271:1276 Coq.Reals.Ranalysis1 <> derive def
+R1278:1278 Integration <> f:1 var
+R1283:1283 Integration <> g:2 var
+R1288:1291 Coquelicot.RInt <> RInt def
+R1293:1293 Integration <> a:3 var
+R1295:1295 Integration <> b:4 var
+R1299:1302 Coq.Reals.Rdefinitions <> ::R_scope:x_'*'_x not
+R1311:1311 Coq.Reals.Rdefinitions <> ::R_scope:x_'*'_x not
+R1298:1298 Integration <> f:1 var
+R1303:1308 Coq.Reals.Ranalysis1 <> derive def
+R1310:1310 Integration <> g:2 var

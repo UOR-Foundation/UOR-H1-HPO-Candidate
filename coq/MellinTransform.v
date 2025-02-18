@@ -6,7 +6,6 @@
 Require Import Reals.
 Require Import Coquelicot.Coquelicot.
 Require Import Psatz.
-Require Import UORH1HPO.
 Open Scope R_scope.
 
 (* We define the spectral zeta function for H1 as:

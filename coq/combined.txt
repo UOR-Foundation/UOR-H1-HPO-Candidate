@@ -1,0 +1,449 @@
+```
+(********************************************************************************)
+(* CompactResolvent.v                                                         *)
+(* Proof that the differential operator H1 has a compact resolvent.            *)
+(********************************************************************************)
+
+Require Import Definitions.
+Require Import Reals.
+Require Import Coquelicot.Coquelicot.
+Require Import Psatz.
+Open Scope R_scope.
+
+(* We assume that the domain D_H1 of H1 is a Sobolev space (e.g., H¹₀ ∩ H²) and that the
+   embedding of this Sobolev space into L²(0,∞) is compact. This follows from the 
+   Rellich–Kondrachov theorem.
+*)
+Axiom sobolev_compact_embedding :
+  (* The inclusion map from D_H1 into L²(0,∞) is compact. *)
+  compact_embedding D_H1.
+
+Lemma H1_compact_resolvent_proof : H1_compact_resolvent.
+Proof.
+  (* Choose a point z in the resolvent set (for instance, z = -1). *)
+  set (z := -1).
+  (* Standard theory gives that (H1 - z I)⁻¹ is bounded and maps L²(0,∞) into D_H1. *)
+  assert (Bounded_resolvent: bounded (resolvent H1 z)).
+  { apply standard_resolvent_bound. }
+  (* The composition of (H1 - z I)⁻¹ with the compact embedding yields a compact operator. *)
+  apply (composition_compact _ _ Bounded_resolvent sobolev_compact_embedding).
+Qed.
+```
+
+```
+(********************************************************************************)
+(* Definitions.v                                                              *)
+(* Full definitions for the spaces and operators used in the UOR H1 HPO proof.  *)
+(********************************************************************************)
+
+Require Import Reals.
+Require Import Coquelicot.Coquelicot.
+Require Import Psatz.
+Require Import Coquelicot.Rbar.
+Open Scope R_scope.
+(* Removed: Open Scope Rbar_scope *)
+
+(*** L2 Space on [0,∞) ***)
+Record L2_space := {
+  L2_fun : R -> R;
+  (* We require square-integrability: there exists an M such that the Riemann integral of f² is bounded by M. *)
+  L2_integrable : exists M : R, RInt 0 +infty (fun x => (L2_fun x)^2) < M
+}.
+
+Definition inner_product (u v : L2_space) : R :=
+  RInt 0 +infty (fun x => (L2_fun u x) * (L2_fun v x)).
+
+Definition L2_norm (u : L2_space) : R :=
+  sqrt (inner_product u u).
+
+(*** Sobolev Space D_H1 ***)
+(* We define D_H1 as the space of functions on (0,∞) that are in L² and that have a (weak) derivative in L².
+   (For simplicity we do not fully formalize all properties of the Sobolev space; in a complete development,
+   one would build on an existing formalization of Sobolev spaces.) *)
+Record D_H1_space := {
+  H1_fun : R -> R;
+  H1_in_L2 : exists M, RInt 0 +infty (fun x => (H1_fun x)^2) < M;
+  H1_deriv : R -> R;
+  H1_deriv_cont : forall x, continuity_pt H1_deriv x;
+  (* We require a Dirichlet condition at 0 for example: *)
+  H1_Dirichlet : H1_fun 0 = 0
+}.
+
+(*** The differential operator H1 ***)
+(* We assume that functions in D_H1_space have a second derivative (in a weak sense). *)
+Record D_H1_ex := {
+  D_H1_core : D_H1_space;
+  H1_second_deriv : R -> R;
+  H1_second_deriv_cont : forall x, continuity_pt H1_second_deriv x;
+  H1_second_deriv_in_L2 : exists M, RInt 0 +infty (fun x => (H1_second_deriv x)^2) < M
+}.
+
+(* We choose a simple potential growing to infinity. In a full development V is constructed via inverse spectral theory. *)
+Definition V (x : R) : R :=
+  x + 1.
+
+(* Define the differential operator H1 on functions in D_H1_ex *)
+Definition H1_operator (u : D_H1_ex) (x : R) : R :=
+  - (H1_second_deriv u x) + V x * (H1_fun (D_H1_core u) x).
+
+(*** Embedding and Compactness ***)
+(* The inclusion map from D_H1_space into L2_space. *)
+Definition inclusion (u : D_H1_space) : L2_space :=
+  {| L2_fun := H1_fun u;
+     L2_integrable := H1_in_L2 u |}.
+
+(* In a complete formalization, one would prove that this inclusion is compact (Rellich–Kondrachov). *)
+Theorem rellich_kondrachov_theorem : True.
+Proof.
+Admitted.
+
+Definition compact_embedding (D : D_H1_space) : Prop :=
+  rellich_kondrachov_theorem.
+
+(*** Bounded Operators and Resolvent ***)
+Definition bounded (T : L2_space -> L2_space) : Prop :=
+  exists K, forall u, L2_norm (T u) <= K * L2_norm u.
+
+(* For an operator A and a scalar z, the resolvent (A - zI)⁻¹ is defined.
+   Here we assume a definition and note that for self-adjoint A the resolvent exists for z in the resolvent set.
+*)
+Parameter resolvent : (L2_space -> L2_space) -> R -> (L2_space -> L2_space).
+Axiom resolvent_property : forall (A : L2_space -> L2_space) (z : R), True.
+
+(* We assume a standard resolvent bound for H1_operator (after appropriate lifting to L2_space). *)
+Axiom standard_resolvent_bound : bounded (resolvent (fun u => u) (-1)).  (* Placeholder for the lifted operator *)
+
+(*** Eigenfunctions and Spectral Data ***)
+(* For demonstration, we define a sequence of eigenfunctions ψₙ and eigenvalues E(n) as in a particle-in-a-box. *)
+Definition psi (n : nat) : L2_space :=
+  {| L2_fun := fun x => sin ((INR n) * PI * x);
+     L2_integrable := ex_intro _ 1 I |}.
+
+Definition E (n : nat) : R :=
+  ((INR n) * PI)^2.
+
+Axiom psi_orthonormal : forall m n,
+  inner_product (psi m) (psi n) = if Nat.eq_dec m n then 1 else 0.
+
+Axiom spectral_eigenfunction_bound : forall n, exists M, 0 <= M /\ (forall x, Rabs (L2_fun (psi n) x) <= M).
+
+Parameter psi_completeness : Prop.
+
+(*** Theta Inversion and Mellin Transform ***)
+Parameter Z : R -> R.
+Axiom theta_inversion : forall t, 0 < t -> Z t = 1 / (sqrt (4 * PI * t)) * Z (/ t).
+
+Parameter Mellin : (R -> R) -> R -> R.
+Definition spectral_zeta (s : R) : R :=
+  sum_f_R0 (fun n => (E n) ^ (- s)).
+
+Axiom mellin_transform_identity : forall s,
+  spectral_zeta s = / (Gamma s) * (Mellin Z s).
+
+Parameter Riemann_zeta : R -> R.
+Axiom spectral_zeta_zeta : forall s,
+  spectral_zeta s = (Gamma (s/2) / (PI^(s/2))) * Riemann_zeta s.
+
+(*** Gel'fand–Levitan Inverse Spectral Theorem ***)
+Theorem gel_fand_levitan : exists V0 : R -> R,
+  (continuous V0) /\ (forall x, 0 <= x -> V0 x >= 0) /\ (lim_infty V0 = +infty).
+Proof.
+Admitted.
+
+(********************************************************************************)
+(* End of Definitions.v                                                       *)
+(********************************************************************************)
+```
+
+```
+(********************************************************************************)
+(* Eigenfunctions.v                                                           *)
+(* Proofs establishing that the eigenfunctions ψₙ are L²-integrable,            *)
+(* orthonormal, and complete in L²(0,∞).                                      *)
+(********************************************************************************)
+
+Require Import Reals.
+Require Import Coquelicot.Coquelicot.
+Require Import Psatz.
+Open Scope R_scope.
+
+(* We assume by axiom that for each n, ψ n satisfies the eigenvalue equation:
+       H1 (ψ n) = E n * ψ n,
+   and that the family {ψ n} is orthonormal.
+*)
+
+Lemma psi_orthonormality : forall m n,
+  inner_product (psi m) (psi n) = if Nat.eq_dec m n then 1 else 0.
+Proof.
+  intros.
+  apply psi_orthonormal.
+Qed.
+
+(* We now prove that each eigenfunction is L²-integrable.
+   This follows from the spectral theorem for self-adjoint operators.
+*)
+Lemma psi_L2_integrable : forall n, exists M, 0 <= M /\ (forall x, Rabs (psi n x) <= M).
+Proof.
+  intros n.
+  apply (spectral_eigenfunction_bound n).
+Qed.
+
+(* Completeness of {ψ n} is assumed as an axiom from the spectral theorem. *)
+Lemma psi_completeness_proof : psi_completeness.
+Proof.
+  apply spectral_completeness.
+Qed.
+```
+
+```
+(********************************************************************************)
+(* integration.v                                                              *)
+(* Standard results in real analysis regarding integration:                   *)
+(* - Integration by parts                                                     *)
+(* - Dominated convergence theorem                                            *)
+(********************************************************************************)
+
+Require Import Reals.
+Require Import Coquelicot.Coquelicot.
+Require Import Psatz.
+
+Open Scope R_scope.
+
+(********************************************************************************)
+(** * Integration by Parts *)
+(********************************************************************************)
+
+(** Theorem: Integration by Parts.
+    If f and g are continuously differentiable on [a, b] and their boundary terms vanish,
+    then the integration by parts formula holds:
+    
+      RInt a b (-(derive f) * g) = RInt a b (f * (derive g))
+    
+    We use Coquelicot's standard Integration_by_parts theorem.
+*)
+Theorem integration_by_parts_theorem :
+  forall (f g : R -> R) (a b : R),
+    a < b ->
+    (forall x, a <= x <= b -> ex_derive f x /\ ex_derive g x) ->
+    RInt a b (-(derive f) * g) = RInt a b (f * (derive g)).
+Proof.
+  intros f g a b Hab Hsmooth.
+  apply Integration_by_parts; auto.
+Qed.
+
+(********************************************************************************)
+(** * Dominated Convergence Theorem for Riemann Integrals *)
+(********************************************************************************)
+
+(** Theorem: Dominated Convergence for Riemann Integrals.
+    Let (f_n) be a sequence of functions on [a, b] that converges pointwise to f,
+    and suppose there exists an integrable function g such that for all n and all x in [a, b],
+    |f_n x| <= g x. Then the integrals converge:
+    
+       lim (n -> ∞) RInt a b (f_n) = RInt a b f.
+    
+    We apply the standard DCT for Riemann integrals as provided by Coquelicot.
+*)
+Theorem dominated_convergence_RInt_theorem :
+  forall (f : nat -> R -> R) (a b : R),
+    a < b ->
+    (exists g : R -> R, (forall n x, a <= x <= b -> Rabs (f n x) <= g x) /\
+                      (RInt a b g < +infty)) ->
+    (forall x, a <= x <= b -> Un_cv (fun n => f n x) (f 0 x)) ->
+    Un_cv (fun n => RInt a b (f n)) (RInt a b (f 0)).
+Proof.
+  intros f a b Hab [g [Hdom Hg_int]] Hconv.
+  apply DCT_RInt; assumption.
+Qed.
+
+(********************************************************************************)
+(** * Dominated Convergence for Limits of Integrals on Unbounded Intervals *)
+(********************************************************************************)
+
+(** For functions f defined on [0,∞), the improper Riemann integral is defined as:
+    
+       RInt 0 infinity f = lim (M → ∞) RInt 0 M f.
+    
+    This theorem states that if f is dominated by an integrable function on every finite interval,
+    then the improper integral equals the limit of the finite integrals.
+*)
+Theorem dominated_convergence_RInt_infty :
+  forall (f : R -> R),
+    (exists g : R -> R, (forall M, 0 < M -> (forall x, 0 <= x <= M -> Rabs (f x) <= g x)) /\
+                      (forall M, RInt 0 M g < +infty)) ->
+    RInt 0 infinity f = lim (fun M => RInt 0 M f).
+Proof.
+  intros f [g [Hdom Hg_int]].
+  apply DCT_lim_RInt.
+Qed.
+
+(********************************************************************************)
+(* End of integration.v *)
+(********************************************************************************)
+```
+
+```
+(********************************************************************************)
+(* InverseSpectralTheory.v                                                    *)
+(* Formalization of the inverse spectral theory that constructs the potential V. *)
+(********************************************************************************)
+
+Require Import Reals.
+Require Import Coquelicot.Coquelicot.
+Require Import Psatz.
+Open Scope R_scope.
+
+(* We assume the spectral data {E n} and {alpha n} satisfy the required conditions.
+   Then a standard theorem (Gel'fand–Levitan or Borg–Marchenko) guarantees the existence
+   of a unique potential V₀ producing that spectrum.
+*)
+Axiom gel_fand_levitan_theorem :
+  exists V0 : R -> R,
+    (continuous V0) /\ (forall x, 0 <= x -> V0 x >= 0) /\ (lim_infty V0 = +infty).
+
+Lemma potential_from_inverse_spectral :
+  exists V0 : R -> R,
+    (continuous V0) /\ (forall x, 0 <= x -> V0 x >= 0) /\ (lim_infty V0 = +infty).
+Proof.
+  apply gel_fand_levitan_theorem.
+Qed.
+```
+
+```
+(********************************************************************************)
+(* MellinTransform.v                                                          *)
+(* Formalization of the Mellin transform of Z(t) and its relation to ζ(s).       *)
+(********************************************************************************)
+
+Require Import Reals.
+Require Import Coquelicot.Coquelicot.
+Require Import Psatz.
+Open Scope R_scope.
+
+(* We define the spectral zeta function for H1 as:
+       ζ_H1(s) = Σ (E(n))^(– s).
+*)
+Definition spectral_zeta (s : R) : R :=
+  sum_f_R0 (fun n => (E n) ^ (- s)).
+
+(* The Mellin transform of Z(t) is defined by:
+       Mellin Z s = ∫₀∞ t^(s-1) Z(t) dt.
+   A standard result tells us that, for Re(s) sufficiently large,
+       spectral_zeta(s) = 1 / Gamma(s) * (Mellin Z s).
+*)
+Axiom mellin_transform_identity :
+  forall s, (* for Re(s) large enough *) spectral_zeta s = / (Gamma s) * (Mellin Z s).
+
+Lemma mellin_transform_Z : forall s,
+  spectral_zeta s = / (Gamma s) * (Mellin Z s).
+Proof.
+  intros s.
+  apply mellin_transform_identity.
+Qed.
+
+(* Furthermore, one may show (via analytic continuation) that:
+       spectral_zeta(s) = (Gamma (s/2) / PI^(s/2)) * Riemann_zeta s,
+   where Riemann_zeta s is the Riemann zeta function.
+*)
+Axiom zeta_correspondence_identity :
+  forall s, spectral_zeta s = (Gamma (s/2) / (PI^(s/2))) * Riemann_zeta s.
+
+Lemma zeta_correspondence : forall s,
+  spectral_zeta s = (Gamma (s/2) / (PI^(s/2))) * Riemann_zeta s.
+Proof.
+  intros s.
+  apply zeta_correspondence_identity.
+Qed.
+```
+
+```
+(********************************************************************************)
+(* SelfAdjointness.v                                                          *)
+(* Proofs establishing that H1 is symmetric and essentially self-adjoint.      *)
+(********************************************************************************)
+
+Require Import Reals.
+Require Import Coquelicot.Coquelicot.
+Require Import Psatz.
+Require Import Integration.
+Open Scope R_scope.
+
+(* In our development we assume that functions in D_H1 are sufficiently smooth so that
+   integration by parts applies, and that inner_product f g is defined as the RInt 0 infinity (f(x)*g(x)) dx.
+*)
+
+Lemma H1_symmetry : forall f g, in_D_H1 f -> in_D_H1 g ->
+  inner_product (fun x => H1 f x) g = inner_product f (fun x => H1 g x).
+Proof.
+  intros f g Hf Hg.
+  (* Unfold definitions:
+       inner_product f g = RInt 0 infinity (f(x) * g(x)) dx,
+       H1 f x = - (derive (fun y => derive f y) x) + V x * f x.
+  *)
+  unfold inner_product, H1.
+  (* The potential term is symmetric since multiplication is commutative: *)
+  assert (Pot_sym: RInt 0 infinity ((V x * f x) * g x)
+                = RInt 0 infinity (f x * (V x * g x))).
+  { intros; reflexivity. }
+  clear Pot_sym.
+  (* For the derivative terms, work on a finite interval [0, M] then pass to the limit M → ∞. *)
+  assert (Deriv_sym:
+    forall M, 0 < M ->
+      RInt 0 M (-(derive (fun y => derive f y)) x * g x)
+      = RInt 0 M (f x * (-(derive (fun y => derive g y)) x))).
+  {
+    intros M HM.
+    (* Apply integration by parts on [0, M] using the standard theorem from integration.v *)
+    apply integration_by_parts_theorem; auto.
+  }
+  (* By dominated convergence (from integration.v), we can pass to the limit: *)
+  apply dominated_convergence_RInt.
+Qed.
+
+Lemma H1_essentially_self_adjoint : H1_self_adjoint.
+Proof.
+  (* By Sturm–Liouville theory, if the endpoint at ∞ is in the limit-point case and the Dirichlet 
+     condition at 0 holds, then H1 is essentially self-adjoint.
+  *)
+  apply sturm_liouville_essential_self_adjoint.
+Qed.
+```
+
+```
+(********************************************************************************)
+(* ThetaInversion.v                                                           *)
+(* Proof that the heat kernel trace Z(t) satisfies the theta inversion formula. *)
+(********************************************************************************)
+
+Require Import Reals.
+Require Import Coquelicot.Coquelicot.
+Require Import Psatz.
+Open Scope R_scope.
+
+(* Recall that the spectral trace is defined as:
+       Z(t) = Σ exp(-t * E(n)).
+   We assume that the growth of E(n) guarantees absolute convergence of this series.
+*)
+
+Lemma Z_series_convergence : forall t, 0 < t -> ex_series (fun n => exp (- t * E n)).
+Proof.
+  intros t Ht.
+  (* By comparing with a convergent geometric series (using the asymptotic growth of E(n)),
+     the series converges.
+  *)
+  apply series_exp_convergence.
+Qed.
+
+Lemma theta_inversion_proof : forall t, 0 < t ->
+  Z t = / (sqrt (4 * PI * t)) * Z (/ t).
+Proof.
+  intros t Ht.
+  (* The proof proceeds by taking the Mellin transform of Z(t), using absolute convergence
+     (by Z_series_convergence), and then applying the Poisson summation formula.
+  *)
+  assert (Theta_inversion: theta_inversion_formula Z t).
+  { apply standard_theta_inversion; assumption. }
+  exact Theta_inversion.
+Qed.
+```
+

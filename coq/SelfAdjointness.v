@@ -6,8 +6,7 @@
 Require Import Reals.
 Require Import Coquelicot.Coquelicot.
 Require Import Psatz.
-Require Import UORH1HPO.  (* Contains definitions: H1, D_H1, in_D_H1, inner_product, etc. *)
-Require Import integration.
+Require Import Integration.
 Open Scope R_scope.
 
 (* In our development we assume that functions in D_H1 are sufficiently smooth so that

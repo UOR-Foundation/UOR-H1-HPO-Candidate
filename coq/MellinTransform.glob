@@ -1,0 +1,14 @@
+DIGEST 2d22ee2741cd0adc61c4ae99d1228632
+FMellinTransform
+R348:352 Coq.Reals.Reals <> <> lib
+R370:390 Coquelicot.Coquelicot <> <> lib
+R408:412 Coq.micromega.Psatz <> <> lib
+def 538:550 <> spectral_zeta
+R557:557 Coq.Reals.Rdefinitions RbaseSymbolsImpl R defax
+binder 553:553 <> s:1
+R562:562 Coq.Reals.Rdefinitions RbaseSymbolsImpl R defax
+R569:576 Coq.Reals.Rfunctions <> sum_f_R0 def
+binder 583:583 <> n:2
+R588:588 Coq.Reals.Rfunctions <> ::R_scope:x_'^'_x not
+R592:596 Coq.Reals.Rfunctions <> ::R_scope:x_'^'_x not
+R600:600 Coq.Reals.Rfunctions <> ::R_scope:x_'^'_x not

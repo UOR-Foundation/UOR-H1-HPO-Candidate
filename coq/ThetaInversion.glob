@@ -1,0 +1,16 @@
+DIGEST 605642463139c84b13744f182e017526
+FThetaInversion
+R346:350 Coq.Reals.Reals <> <> lib
+R368:388 Coquelicot.Coquelicot <> <> lib
+R406:410 Coq.micromega.Psatz <> <> lib
+prf 611:630 <> Z_series_convergence
+binder 641:641 <> t:1
+R649:652 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R645:647 Coq.Reals.Rdefinitions <> ::R_scope:x_'<'_x not
+R648:648 ThetaInversion <> t:1 var
+R653:661 Coquelicot.Series <> ex_series def
+binder 668:668 <> n:2
+R673:675 Coq.Reals.Rtrigo_def <> exp def
+R681:683 Coq.Reals.Rdefinitions <> ::R_scope:x_'*'_x not
+R678:679 Coq.Reals.Rdefinitions <> ::R_scope:'-'_x not
+R680:680 ThetaInversion <> t:1 var
