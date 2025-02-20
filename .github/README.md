@@ -1,4 +1,4 @@
-Compiled Docs: https://github.com/UOR-Foundation/UOR-H1-HPO-Candidate/releases/latest
+# Looking for PDFs? Compiled Docs: https://github.com/UOR-Foundation/UOR-H1-HPO-Candidate/releases/latest
 
 ### This Repo is being actively developed to run the proofs in GitHub Actions. Start with the Docs and we'll try to have the proofs ready when you are done. 
 
